@@ -1,0 +1,373 @@
+create database breakdown ;
+use breakdown ;
+
+create table Member
+( 
+  Member_ID int primary key,
+  First_Name varchar(20),
+  Last_name varchar(20),
+  Member_Location varchar(20),
+  Member_Age int
+);
+
+create table Vehicle 
+(
+ Vehicle_Registration varchar(10) primary key,
+ Vehicle_make varchar(10),
+ Vehicle_model varchar(10),
+ Member_ID int 
+);
+
+create table Engineer
+(
+Engineer_ID int primary key ,
+First_Name varchar(20),
+Last_Name varchar(20)
+);
+
+create table Breakdown
+(
+ Breakdown_ID int primary key,
+ Vehicle_Registration varchar(10),
+ Engineer_ID int,
+ Breakdown_Date date ,
+ Breakdown_Time time ,
+ Breakdown_Location varchar(20)
+);
+
+insert into Member(member_id,first_name,last_name,member_location,member_age) values 
+(1,'John','Doe','New York',32),
+(2,'Jane','Smith','Los Angeles',27),
+(3,'Mark','Jones','Chicago',45),
+(4,'Emily','Davis','Houston',30),
+(5,'Luke','Brown','Phoenix',38),
+(6,'Sophia','White','Dallas',29),
+(7,'Liam','Taylor','Miami',41),
+(8,'Olivia','Green','San Diego',36),
+(9,'James','Harris','Denver',33),
+(10,'Mia','Robinson','Atlanta',25);
+
+insert into Vehicle(vehicle_registration,vehicle_make,vehicle_model,member_id) values
+('ABC1234','Toyota','Corolla',1),
+('XYZ5678','Ford','Mustang',2),
+('DEF1111','Honda','Civic',3),
+('GHI2222','Chevy','Cruze',4),
+('JKL3333','BMW','X5',5),
+('MNO4444','Audi','A4',1),
+('PQR5555','Mercedes','C300',2),
+('STU6666','Nissan','Altima',3),
+('VWX7777','Hyundai','Elantra',6),
+('YZA8888','Tesla','Model S',7),
+('BCD9999','Kia','Sportage',8),
+('EFG1112','Subaru','Forester',9),
+('HIJ1212','Jeep','Wrangler',10),
+('KLM1414','Mazda','CX-5',4),
+('NOP1515','Honda','Accord',5),
+('QRS1616','Chevy','Malibu',6),
+('TUV1717','Nissan','Sentra',7),
+('WXY1818','Ford','Explorer',8),
+('ZAB1919','Volvo','XC90',9),
+('CDE2020','Lexus','RX350',10);
+
+insert into Engineer(engineer_id,first_name,last_name) values
+(1,'Ethan','Williams'),
+(2,'Olivia','Miller'),
+(3,'Sophia','Clark'),
+(4,'Noah','Walker');
+
+insert into Breakdown(breakdown_id,vehicle_registration,engineer_id,breakdown_date,breakdown_time,breakdown_location) values 
+(1,'ABC1234',1,'2024-09-10','10:30:00','New York'),
+(2,'XYZ5678',2,'2024-09-10','11:00:00','Los Angeles'),
+(3,'DEF1111',3,'2024-09-10','12:30:00','Chicago'),
+(4,'GHI2222',4,'2024-09-15','14:00:00','Houston'),
+(5,'JKL3333',1,'2024-09-18','09:45:00','Phoenix'),
+(6,'MNO4444',2,'2024-09-25','08:20:00','New York'),
+(7,'PQR5555',3,'2024-09-28','11:15:00','Los Angeles'),
+(8,'STU6666',4,'2024-09-30','15:30:00','Chicago'),
+(9,'ABC1234',2,'2024-10-10','09:30:00','New York'),
+(10,'XYZ5678',3,'2024-10-15','13:30:00','Los Angeles'),
+(11,'DEF1111',4,'2024-10-20','14:45:00','Chicago'),
+(12,'MNO4444',1,'2024-10-22','16:20:00','New York'),
+(13,'JKL3333',2,'2024-10-25','17:00:00','Phoenix'),
+(14,'VWX7777',3,'2024-11-01','08:00:00','Dallas'),
+(15,'YZA8888',4,'2024-11-05','09:00:00','Miami'),
+(16,'BCD9999',1,'2024-11-10','10:30:00','San Diego'),
+(17,'EFG1112',2,'2024-11-15','14:00:00','Denver'),
+(18,'HIJ1212',3,'2024-11-18','11:00:00','Atlanta'),
+(19,'KLM1414',4,'2024-11-20','15:45:00','Houston'),
+(20,'NOP1515',1,'2024-11-25','16:30:00','Phoenix');
+
+
+alter table vehicle add foreign key (member_id) references member (member_id);
+alter table breakdown add foreign key(vehicle_registration) references vehicle (vehicle_registration);
+alter table breakdown add foreign key(engineer_id) references engineer (engineer_id);
+
+
+-- -----------------------  TASK - Part 1 ------------------ --
+
+-- 1. Retrieve the first 5 members from the Member table. 
+
+select * from member limit 5 ;
+
+-- 2. Retrieve 5 members starting from the 6th row.
+
+select * from member limit 5 offset 5 ; 
+
+-- 3. List members who are older than 30 years. 
+
+select * from member where member_age > 30 ; 
+
+-- 4. Find members who live in either New York or Los Angeles. 
+
+select * from member where member_location in ('New York','Los Angeles');
+
+-- 5. Retrieve all vehicles where the make is either 'Toyota' or 'Honda'. 
+
+select * from vehicle where vehicle_make in ('Toyota','Honda');
+
+-- 6. Find members whose age is between 25 and 40 years. 
+
+select * from member where member_age between 25 and 40; 
+
+-- 7 . List vehicles whose registration number starts with the letter 'A'. 
+
+select * from vehicle where vehicle_registration like 'A%'; 
+
+-- 8 . Find vehicles where the model ends with the number '5'. 
+
+select * from vehicle where vehicle_model like '%5';
+
+-- 9 . List all engineers and order them alphabetically by their last name. 
+
+select * from engineer order by last_name asc; 
+
+-- 10 . Retrieve all members and order them by age in descending order . 
+
+select * from member order by member_age desc; 
+
+-- 11. Count the total number of members in the member table . 
+
+select count(*) as total_members from member; 
+
+-- 12. Rettrieve all breakdowns that occurred in the year of 2024. 
+
+select * from breakdown where year(breakdown_date) = 2024 ; 
+
+-- 13. Find breakdowns for vehicles with the registration 'ABC1234' or 'XYZ5678' . 
+
+select * from breakdown where vehicle_registration in ('ABC1234','XYZ5678');
+
+-- 14. List all vehicles with the make 'FORD'. 
+
+select * from vehicle where vehicle_make = 'Ford'; 
+
+-- 15. Find members whose first name starts with the letter 'J'. 
+
+select * from member where first_name like 'J%'; 
+
+-- 16. Retrieve breakdowns that occurred before November 1st , 2024. 
+
+select * from breakdown where breakdown_date <'2024-10-01'; 
+
+-- 17. List members whose last name contains 'son' . 
+
+select * from member where last_name like'%son%'; 
+
+-- 18. Find breakdwons that occurred in locations containing 'New' . 
+
+select * from breakdown where breakdown_location like '%New%'; 
+
+-- 19 . retrieve the youngest member in the member table. 
+
+select * from member order by member_age asc limit 1 ; 
+
+-- 20. Retrieve the oldest member in the member table . 
+
+select * from member order by member_age desc limit 1; 
+
+-- 21. Find vehicles owned by members who live in Los Angeles . 
+
+select v.* from vehicle v join member m on v.member_id=m.member_id where m.member_location='Los Angeles';
+
+-- 22. Retrieve all breakdowns handled by engineer with ID 1 . 
+
+select * from breakdown where engineer_id = 1 ; 
+
+-- 23. List all members who are younger than 35 years. 
+
+select * from member where member_age < 35 ; 
+
+-- 24. Find members who live in either Phoenix or Houston. 
+
+select * from member where member_location in ('Houston','Phoenix');
+
+-- 25. Retrieve vehicles where the model is either 'Civic' or ' Mustang'. 
+
+select * from vehicle where vehicle_model in ('Civic','Mustang');
+
+-- 26. List members whose first name contains the letter 'a'. 
+
+select * from member where first_name like '%a%'; 
+
+-- 27. Retrieve breakdowns that occurred between September 1st,2024 and September 28th , 2024. 
+
+select * from breakdown where breakdown_date between '2024-09-01' and '2024-09-28'; 
+
+-- 28 . Find members whose age is not between 20 and 40 years. 
+
+select * from member where member_age not between 20 and 40 ; 
+
+-- 29 . List breakdowns that occurred after October 1st , 2024. 
+
+select * from breakdown where breakdown_date > '2024-10-01'; 
+
+-- 30 . Retrieve the top 3 oldest memebrs from the member table. 
+
+select * from member order by member_age desc limit 3 ; 
+
+-- --------------------------   Task - Part 2 --------------------------  
+
+-- 1 . Count the number of breakdowns for each vehicle . 
+
+select vehicle_registration, count(*) as breakdown_count from breakdown group by vehicle_registration ; 
+
+-- 2 . Find members who own more than one vehicle . 
+
+select member_id, count(*) as vehicle_count from vehicle group by member_id having count(*) > 1 ; 
+
+-- 3. Retrieve the total number of breakdowns handled by each engineer. 
+
+select engineer_id, count(*) as total_breakdowns from breakdown group by engineer_id; 
+
+-- 4. Group breakdowns by location and sort them by the toal number of rbeakdowns in each location . 
+
+select breakdown_location , count(*) as breakdown_count from breakdown group by breakdown_location order by breakdown_count desc; 
+
+-- 5. List vehicles owned by members who are younger than 30 years. 
+
+select v.* from vehicle v join member m on v.member_id=m.member_id where member_age < 30 ; 
+
+-- 6. Retrieve all breakdowns and sort them by time and descending order . 
+
+select * from breakdown order by breakdown_time desc; 
+
+-- 7. Find all breakdowns for vehicles owned by members who live in New York . 
+
+select b.*, m.member_location from breakdown b join vehicle v on b.vehicle_registration=v.vehicle_registration join member m on v.member_id=m.member_id where m.member_location = 'New York' ; 
+
+-- 8 . Retrieve memebrs who do not own any vehicles. 
+
+select * from member m left join vehicle v on m.member_id=v.member_id where v.vehicle_registration is null; 
+
+-- 9 . Find breakdowns that occurred in the same city where the vehicle owner resides. 
+
+select b.* from breakdown b join vehicle v on b.vehicle_registration=v.vehicle_registration join member m on v.member_id=m.member_id where b.breakdown_location=m.member_location; 
+
+-- 10 . Retrieve the total number of breakdowns handled by each engineer during 2024. 
+
+select engineer_id,count(*) as total_breakdowns_2024 from breakdown where year(breakdown_date)=2024 group by engineer_id; 
+
+
+-- ---------------------------- Task - Part 3 ---------------------------- 
+
+-- 1. Retrieve a list of members along with their vehicles using a join . 
+
+use breakdown;
+
+select m.member_id,m.first_name,m.last_name,v.vehicle_registration,v.vehicle_make,v.vehicle_model from member m join vehicle v on m.member_id=v.member_id;
+
+-- 2. Retrieve breakdown details along with the respective member details using a join. 
+
+select b.breakdown_id,b.breakdown_date,b.breakdown_location,m.member_id,m.first_name,m.last_name from breakdown b join vehicle v on b.vehicle_registration=v.vehicle_registration join member m on v.member_id=m.member_id;
+
+-- 3. Find members who own a vehicle but have never experienced a breakdown. 
+
+select m.member_id,m.first_name,m.last_name from member m join vehicle v on m.member_id=v.member_id left join breakdown b on v.vehicle_registration=b.vehicle_registration where b.breakdown_id is null; 
+
+-- 4. Retrieve vehicles along with the count of their breakdowns using a join and group by. 
+
+select v.vehicle_registration,v.vehicle_make,v.vehicle_model,count(b.breakdown_id) as breakdown_count from vehicle v left join breakdown b on v.vehicle_registration=b.vehicle_registration group by v.vehicle_registration;
+
+-- 5. Find members whose vehicles have broken down more than twice. 
+
+select m.member_id,m.first_name,m.last_name,count(b.breakdown_id) as breakdown_count from member m join vehicle v on m.member_id=v.member_id join breakdown b on v.vehicle_registration=b.vehicle_registration group by m.member_id having Count(b.breakdown_id) > 2 ; 
+
+-- 6. Retrieve breakdowns where multiple vehicles broke down on the same day. 
+
+select breakdown_date, count(vehicle_registration) as breakdown_count from breakdown group by breakdown_date having count(vehicle_registration) > 1; 
+
+-- 7. Count the total breakdowns handled by each engineer and label those who handled more than 5 breakdowns as 'Expert' and others as 'Beginner' using a case expression. 
+
+select t.engineer_id,t.first_name,t.last_name,t.breakdown_count,
+case
+    when t.breakdown_count > 5 then 'Expert'
+    else 'Beginner'
+    end as skill_level
+from (
+select e.engineer_id,e.first_name,e.last_name,
+count(b.breakdown_id) as breakdown_count
+from engineer e
+left join breakdown b on e.engineer_id=b.engineer_id
+group by e.engineer_id,e.first_name,e.last_name
+)t ; 
+
+-- 8 . List all vehicles that have never had a breakdwon using a subquery. 
+
+select v.vehicle_registration,v.vehicle_make,v.vehicle_model from vehicle v where v.vehicle_registration not in (select b.vehicle_registration from breakdown b ); 
+
+-- 9 . Find the average age of members whose vehicles have experienced at least one breakdown . 
+
+select avg(m.member_age) as average_age from member m join vehicle v on m.member_id=v.member_id join breakdown b on v.vehicle_registration=b.vehicle_registration; 
+
+-- 10 . Retrieve the top 3 vehicles with the highest number of breakdowns, ordered by breakdown count. 
+
+select v.vehicle_registration,v.vehicle_make,v.vehicle_model, count(b.breakdown_id) as breakdown_count from vehicle v join breakdown b on v.vehicle_registration=b.vehicle_registration group by v.vehicle_registration,v.vehicle_make,v.vehicle_model  order by breakdown_count desc limit 3 ; 
+
+
+-- ------------------------ Task - Part 4 ------------------------------
+
+-- RESEARCH - aggregate functions --
+
+-- 1 . Avg() function  - returns the average value of a numeric column . It sums up all the values and divides them by the total number of rows. 
+
+-- select avg(column_name) as average_sale from table_name ; 
+
+-- 2. max() function - returns the maximum value from a column. It is often used to find the highest value in a numeric or date column . 
+
+-- select max(culumn_name) as highest_salary from table_name ; 
+
+-- 3. min() function - returns the minimum value from a column , similar to max() but for the smallest value. 
+
+-- select min(column_name) as lowest_salary from table_name; 
+
+-- 4. sum() function - returns the sum of values in a numeric column . It is used to calculate the total value of a column over all rows. 
+
+-- select sum(column_name) as total_sales from table_name; 
+
+
+-- ------------------------------ Task - Part 5 -----------------------
+
+-- 1. Update 3 records in the engineer table .
+
+use breakdown;
+
+update engineer 
+set first_name='Michael',last_name='Scofield' 
+where engineer_id=1 ;
+
+update engineer
+set first_name='Lincoln', last_name='Burrows'
+where engineer_id=2; 
+
+update engineer 
+set first_name='Alex',last_name='Mahone' 
+where engineer_id=3; 
+
+-- 2. delete 2 records from the breakdown table . 
+
+delete from breakdown where breakdown_id=9 ; 
+
+delete from breakdown where breakdown_id = 14 ; 
+
+
+
